@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "388643545730",
+    "firebase_url": "https://resiease-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "resiease",
+    "storage_bucket": "resiease.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388643545730:android:d80a8b4b7fefb6038d0a9b",
+        "android_client_info": {
+          "package_name": "com.example.resiease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2SrKRPiUQ6Bo4pTw66tu4xkg2he_kYhg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

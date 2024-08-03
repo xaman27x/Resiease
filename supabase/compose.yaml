@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 54321:54321
+    depends_on:
+      - supabase-vector
+      - supabase-imgproxy
+
+  supabase-vector:
+    image: timberio/vector:0.28.1
+    volumes:
+      - ./vector.yml:/etc/vector/vector.yml
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      - VECTOR_LOG=info
+
+  supabase-imgproxy:
+    image: darwintantuco/supabase-imgproxy
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    environment:
+      - IMGPROXY_LOG_LEVEL=info
+
+# Uncomment and modify the following lines to add a PostgreSQL database if needed
+#   db:
+#     image: postgres
+#     restart: always
+#     user: postgres
+#     secrets:
+#       - db-password
+#     volumes:
+#       - db-data:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=example
+#       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+#     expose:
+#       - 5432
+#     healthcheck:
+#       test: ["CMD", "pg_isready"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 5
+
+# volumes:
+#   db-data:
+
+# secrets:
+#   db-password:
+#     file: db/password.txt

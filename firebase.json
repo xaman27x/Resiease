@@ -1,0 +1,72 @@
+{
+  "database": {
+    "rules": "database.rules.json"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "database": {
+      "port": 9000
+    },
+    "storage": {
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true
+    },
+    "singleProjectMode": true
+  },
+  "remoteconfig": {
+    "template": "remoteconfig.template.json"
+  },
+  "extensions": {},
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "resiease",
+          "appId": "1:388643545730:android:d80a8b4b7fefb6038d0a9b",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "resiease",
+          "configurations": {
+            "android": "1:388643545730:android:d80a8b4b7fefb6038d0a9b",
+            "ios": "1:388643545730:ios:040c0a1ee8580b268d0a9b",
+            "web": "1:388643545730:web:27c5cbf0c3592ee08d0a9b"
+          }
+        }
+      }
+    }
+  }
+}
