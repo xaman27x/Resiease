@@ -50,7 +50,7 @@ Contributions are what make the open source community such an amazing place to l
 
 ## About the Developer
 
-Resiease App is developed by **[Aman Morghade]**
+Resiease App is developed by **Aman Morghade**
 
 ## Updates
 
@@ -58,8 +58,8 @@ Working on **Artificial Neural Network Models** to power the alert and complaint
 
 ### Connect with Me
 
-- LinkedIn: [Your LinkedIn](https://www.linkedin.com/in/amanmorghade)
-- GitHub: [Your GitHub](https://github.com/xaman27x)
+- LinkedIn: [LinkedIn](https://www.linkedin.com/in/amanmorghade)
+- GitHub: [GitHub](https://github.com/xaman27x)
 
 Feel free to reach out for collaboration, feedback, or just to say hi!
 
