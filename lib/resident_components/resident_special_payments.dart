@@ -41,27 +41,15 @@ void _handlePaymentSuccess(PaymentSuccessResponse response) async {
       debugPrint('RequestID is not defined.');
       return;
     }
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('ResidencyFees')
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('ResidencySpecialFees')
         .where('RequestID', isEqualTo: requestID)
         .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot documentSnapshot = querySnapshot.docs.first;
-
-      debugPrint('Document ID: ${documentSnapshot.id}');
-      debugPrint('Residents before update: ${documentSnapshot['Residents']}');
-
-      await FirebaseFirestore.instance
-          .collection('ResidencyFees')
-          .doc(documentSnapshot.id)
-          .update({
-        'Residents': FieldValue.arrayRemove([userId])
-      });
-      debugPrint('User ID $userId removed from Residents array successfully');
-    } else {
-      debugPrint('No document found with the specified RequestID');
-    }
+    final docId = querySnapshot.docs.first.id;
+    await FirebaseFirestore.instance
+        .collection('ResidencySpecialFees')
+        .doc(docId)
+        .delete();
   } catch (e) {
     debugPrint('An error occurred: $e');
   }
@@ -202,11 +190,15 @@ class _ResidentSpecialPaymentPageState
                                       backgroundColor: Colors.amber[200]),
                                   onPressed: () {
                                     requestID = data['RequestID'];
-                                    createOrder(data['Reason'], data['Amount'])
-                                        .then((orderID) {
-                                      _openCheckout(orderID, data['Amount'],
-                                          data['Reason']);
-                                    });
+                                    createOrder(
+                                      data['Reason'],
+                                      data['Amount'],
+                                    ).then(
+                                      (orderID) {
+                                        _openCheckout(orderID, data['Amount'],
+                                            data['Reason']);
+                                      },
+                                    );
                                   },
                                   child: const Text(
                                     "PAY NOW!",

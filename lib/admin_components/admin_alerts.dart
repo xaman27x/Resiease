@@ -44,6 +44,7 @@ Future<void> _uploadAlerts({required String alert}) async {
     'ResidenceID': data['Residence ID'],
     'Timestamp': DateTime.now(),
   };
+
   await FirebaseFirestore.instance
       .collection('ResidencyAlerts')
       .add(dataUpload);
@@ -51,6 +52,20 @@ Future<void> _uploadAlerts({required String alert}) async {
 
 class _AdminAlertsPageState extends State<AdminAlertsPage> {
   final TextEditingController _controllerAlert = TextEditingController();
+  late String message = '';
+
+  Widget _displayMessage(String message) {
+    if (message == '') {
+      return const SizedBox();
+    } else {
+      return Text(
+        message,
+        style: TextStyle(
+          color: Colors.amber[200],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,12 +95,16 @@ class _AdminAlertsPageState extends State<AdminAlertsPage> {
           child: Column(
             children: [
               _entryField('Alert', _controllerAlert, false),
+              _displayMessage(message),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 23, 23, 23),
                 ),
                 onPressed: () {
                   _uploadAlerts(alert: _controllerAlert.text);
+                  setState(() {
+                    message = "Successfully Updated Your Alert!";
+                  });
                 },
                 child: const Text(
                   'ALERT',

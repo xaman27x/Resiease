@@ -1,6 +1,7 @@
 // deno-lint-ignore-file
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-app.js';
 import { getFirestore, collection, onSnapshot, updateDoc, doc } from 'https://www.gstatic.com/firebasejs/9.8.0/firebase-firestore.js';
+import { corsHeaders } from './cors.ts';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBdSVt9Yr6RdT8qWHzAh05vVXBARvYjKbg",
@@ -139,6 +140,8 @@ Deno.serve(async (req) => {
       }
     });
   });
-
+  if(req.method == 'POST' || req.method == 'PUT' || req.method == 'GET') {
+    Headers: corsHeaders;
+  }
   return new Response('Listening for new ResidencyComplaints...\n\n', { status: 200 });
 });
