@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:resiease/models/auth.dart';
+import 'package:geekyants_flutter_gauges/geekyants_flutter_gauges.dart';
 
 class AdminComplaintPage extends StatefulWidget {
   const AdminComplaintPage({super.key});
@@ -46,12 +47,29 @@ class _AdminComplaintPageState extends State<AdminComplaintPage> {
     debugPrint('Severity: $severity');
     return ListTile(
       title: Text(
-        data['Complaint'],
+        data['Name'] + ' ' + data['Last Name'] + ': ' + data['Complaint'],
         style: const TextStyle(color: Colors.white),
       ),
-      subtitle: Text(
-        data['Name'] + ' ' + data['Last Name'],
-        style: const TextStyle(color: Colors.white70),
+      trailing: Text(
+        "Level: $severity",
+        style: const TextStyle(
+          color: Colors.white70,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: LinearGauge(
+        linearGaugeBoxDecoration:
+            const LinearGaugeBoxDecoration(thickness: 7, borderRadius: 5),
+        rulers: RulerStyle(rulerPosition: RulerPosition.center),
+        start: 0,
+        end: 5,
+        steps: 1,
+        valueBar: [
+          ValueBar(
+            value: severity,
+            color: Colors.red,
+          ),
+        ],
       ),
     );
   }
