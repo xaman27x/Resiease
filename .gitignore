@@ -46,4 +46,5 @@ app.*.map.json
 /lib/firebase_options.dart
 /supabase/functions/lambdas/env_constants.ts
 /lib/resident_components/env.dart
+/supabase/functions/createOrder/.env
 
