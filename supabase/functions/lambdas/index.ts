@@ -132,6 +132,7 @@ Deno.serve(async (req) => {
     });
   });
 
+
   const Alertquery = collection(db, 'ResidencyAlerts');
   onSnapshot(Alertquery, (snapshot: { docChanges: () => any[]; }) => {
     snapshot.docChanges().forEach((change) => {

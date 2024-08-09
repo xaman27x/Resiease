@@ -3,10 +3,14 @@ import 'package:resiease/models/auth.dart';
 import 'package:resiease/screens/home_page.dart';
 import 'package:resiease/screens/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../globals.dart';
 
 Future<bool> _checkAdminExists({required String uid}) async {
   DocumentSnapshot document =
       await FirebaseFirestore.instance.collection('Admins').doc(uid).get();
+  if (document.exists) {
+    AdminData.isAdmin = true;
+  }
   return document.exists;
 }
 
@@ -33,7 +37,9 @@ class _LoginTreePageState extends State<LoginTreePage> {
             future: _checkAdminExists(uid: uid),
             builder: (context, adminSnapshot) {
               if (adminSnapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
               }
 
               if (adminSnapshot.hasData) {

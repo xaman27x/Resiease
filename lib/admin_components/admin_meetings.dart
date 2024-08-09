@@ -156,7 +156,7 @@ class _AdminMeetingsPageState extends State<AdminMeetingsPage> {
               const SizedBox(height: 30),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 59, 59, 59),
+                  backgroundColor: Colors.amber[100],
                 ),
                 onPressed: () {
                   _uploadMeetingSchedule(
@@ -169,7 +169,7 @@ class _AdminMeetingsPageState extends State<AdminMeetingsPage> {
                 child: const Text(
                   'SEND ALERT',
                   style: TextStyle(
-                    color: Color.fromARGB(255, 230, 208, 18),
+                    color: Colors.black,
                   ),
                 ),
               )

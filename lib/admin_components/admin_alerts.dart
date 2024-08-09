@@ -43,6 +43,7 @@ Future<void> _uploadAlerts({required String alert}) async {
     'Alert': alert,
     'ResidenceID': data['Residence ID'],
     'Timestamp': DateTime.now(),
+    'Severity': '0',
   };
 
   await FirebaseFirestore.instance

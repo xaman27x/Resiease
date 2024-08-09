@@ -10,8 +10,10 @@ import 'package:resiease/admin_components/admin_payments.dart';
 import 'package:resiease/admin_components/admin_members.dart';
 import 'package:resiease/admin_components/admin_meetings.dart';
 import 'package:resiease/resident_components/resident_special_payments.dart';
+import 'package:resiease/shared_components/info_page.dart';
 import '../admin_components/admin_alerts.dart';
 import 'introduction_page.dart';
+import 'package:geekyants_flutter_gauges/geekyants_flutter_gauges.dart';
 
 class HomeGlobals {
   static String residenceID = '';
@@ -29,6 +31,20 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const InfoPage(),
+              ),
+            ),
+          },
+          icon: Icon(
+            Icons.info_outline_rounded,
+            color: Colors.blueAccent[400],
+          ),
+        ),
         automaticallyImplyLeading: false,
         title: Image.asset('images/title_2.png', scale: 3.8),
         backgroundColor: Colors.white,
@@ -237,34 +253,88 @@ class ResidentHomePage extends StatefulWidget {
 class _ResidentHomePageState extends State<ResidentHomePage> {
   late Stream<QuerySnapshot> _alertsStream = const Stream.empty();
 
+  Widget _buildAlertItem(BuildContext context, DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+    double severity = double.tryParse(data['Severity'] ?? 0.0) ?? 0.0;
+    debugPrint('Severity: $severity');
+    return ListTile(
+      title: Text(
+        data['Alert'],
+        style: const TextStyle(color: Colors.white),
+      ),
+      trailing: Text(
+        "Level: $severity",
+        style: const TextStyle(
+          color: Colors.white70,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      subtitle: LinearGauge(
+        linearGaugeBoxDecoration:
+            const LinearGaugeBoxDecoration(thickness: 7, borderRadius: 5),
+        rulers: RulerStyle(rulerPosition: RulerPosition.center),
+        start: 0,
+        end: 5,
+        steps: 1,
+        valueBar: [
+          ValueBar(
+            value: severity,
+            color: Colors.red,
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _fetchResidenceID() async {
     final uid = Auth().currentUser!.uid;
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('Residents')
         .where('UserID', isEqualTo: uid)
         .get();
+
     final data = querySnapshot.docs.first;
     HomeGlobals.residenceID = data['ResidenceID'];
   }
 
   Future<void> _initializeStream() async {
+    setState(() {
+      _alertsStream = FirebaseFirestore.instance
+          .collection('ResidencyAlerts')
+          .where('ResidenceID', isEqualTo: HomeGlobals.residenceID)
+          .snapshots();
+    });
+  }
+
+  Future<void> _initializeData() async {
     await _fetchResidenceID();
-    _alertsStream = FirebaseFirestore.instance
-        .collection('ResidencyAlerts')
-        .where('ResidenceID', isEqualTo: HomeGlobals.residenceID)
-        .snapshots();
+    _initializeStream();
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchResidenceID();
+    _initializeData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const InfoPage(),
+              ),
+            ),
+          },
+          icon: Icon(
+            Icons.info_outline_rounded,
+            color: Colors.blueAccent[400],
+          ),
+        ),
         automaticallyImplyLeading: false,
         title: Image.asset(
           'images/title_2.png',
@@ -301,6 +371,60 @@ class _ResidentHomePageState extends State<ResidentHomePage> {
       ),
       body: Container(
         color: const Color.fromARGB(255, 161, 151, 108),
+        child: Center(
+          child: Column(
+            children: [
+              const Text(
+                "ALERTS",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                ),
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _alertsStream,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          'SOME ERROR OCCURRED WHILE FETCHING COMPLAINTS',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(
+                        child: Text(
+                          'NO ALERTS FOUND',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        return _buildAlertItem(
+                          context,
+                          snapshot.data!.docs[index],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: Container(
         color: Colors.amber[100],
