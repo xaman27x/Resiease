@@ -1,5 +1,12 @@
 {
   "projects": {
     "default": "resiease"
-  }
+  },
+  "targets": {},
+  "etags": {
+    "resiease": {
+      "extensionInstances": {}
+    }
+  },
+  "dataconnectEmulatorConfig": {}
 }
