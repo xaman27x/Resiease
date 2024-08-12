@@ -6,6 +6,7 @@ import 'package:resiease/models/auth.dart';
 class AdminData {
   static String adminName = '';
   static String designation = '';
+  static String resId = '';
 }
 
 Future<void> _retrieveAdminData_Resident() async {
@@ -15,6 +16,7 @@ Future<void> _retrieveAdminData_Resident() async {
       .get();
   final data = querySnapshot.docs.first;
   final String resId = data['ResidenceID'];
+  AdminData.resId = resId;
   final QuerySnapshot adminQuery = await FirebaseFirestore.instance
       .collection('Admins')
       .where('Residence ID', isEqualTo: resId)
@@ -32,8 +34,10 @@ class ResidentMembersPage extends StatefulWidget {
 }
 
 class _ResidentMembersPageState extends State<ResidentMembersPage> {
-  final Stream<QuerySnapshot> _usersStream =
-      FirebaseFirestore.instance.collection('Residents').snapshots();
+  final Stream<QuerySnapshot> _usersStream = FirebaseFirestore.instance
+      .collection('Residents')
+      .where('ResidenceID', isEqualTo: AdminData.resId)
+      .snapshots();
 
   @override
   void initState() {
