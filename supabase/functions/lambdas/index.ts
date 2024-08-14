@@ -14,7 +14,7 @@ const firebaseConfig = {
   measurementId: "G-GCK7YVD96H"
 };
 
-const apiKey = 'AIzaSyDw-R-qjuN7exGVSvAHFlQOJ6xMLsqhS_0';
+const apiKey = env.GOOGLE_API_KEY;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
